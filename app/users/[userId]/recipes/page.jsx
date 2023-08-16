@@ -1,0 +1,144 @@
+"use client";
+import EmptyComponent from "@/components/EmptyComponent";
+import FilterSection from "@/components/FilterSection";
+import Loader from "@/components/Loader";
+import RecipeModal from "@/components/modals/RecipeModal";
+import UserBanModal from "@/components/modals/UserBanModal";
+import UserTypeModal from "@/components/modals/UserTypeModal";
+import axiosFetch from "@/lib/axios";
+import { selectModal, selectRecipe } from "@/redux/features/modals";
+import { users } from "@/utils";
+import { Box, Modal } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+function UserRecipes({ params: { userId } }) {
+  const [recipes, setRecipes] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const { recipe } = useSelector(selectModal);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    fetchUserRecipes();
+  }, []);
+
+  const fetchUserRecipes = async () => {
+    axiosFetch
+      .get("/recipes/" + userId)
+      .then(({ data }) => setRecipes(data.recipes))
+      .catch((error) => console.log(error))
+      .finally(() => setLoading(false));
+  };
+
+  if (loading) return <Loader />;
+
+  if (!loading && users.length === 0) return <EmptyComponent title="Recipes" />;
+
+  return (
+    <div className="">
+      <div className="overflow-x-scroll mx-4 hidden lg:block pb-[100px] no-scrollbar">
+        <h1 className="text-4xl my-3 text-white">
+          {recipes[0].owner._id} : Username
+        </h1>
+        <table className="w-full overflow-x-scroll">
+          <thead>
+            <tr className="w-full flex text-white rounded-md bg-[#706462] py-2">
+              <th className="flex-1">ID</th>
+              <th className="flex-1">Recipe name</th>
+              <th className="flex-1">Cuisine</th>
+              <th className="flex-1">Dish</th>
+              <th className="flex-1">Recipe Image</th>
+              <th className="flex-1">Click count</th>
+              <th className="flex-1">Amount</th>
+              <th className="flex-1">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {recipes.map((recipe, i) => (
+              <tr
+                key={i}
+                className={`${
+                  i % 2 === 0 ? "bg-tp" : "bg-[#7a6f6c]"
+                } w-full py-3 flex rounded-lg`}
+              >
+                <td className="flex-1 text-center text-sm">{recipe._id}</td>
+                <td className="flex-1 text-center text-sm">{recipe?.title}</td>
+                <td className="flex-1 text-center text-sm">
+                  {recipe?.cuisine?.name}
+                </td>
+                <td className="flex-1 text-center text-sm">
+                  {recipe?.dishesType}
+                </td>
+                <td className="flex-1">
+                  <img
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjKPuLozRC2n4MnlyKlPdTQm6keMAOJnlTwQ&usqp=CAU"
+                    alt=""
+                    className="mx-auto contain h-[50px] w-[50px] contain rounded-md"
+                  />
+                </td>
+                <td className="flex-1 text-center text-sm">
+                  {recipe?.counter?.numberOfClicks}
+                </td>
+                <td className="flex-1 text-center text-sm">$100</td>
+                <td className="flex-1 text-center text-sm">
+                  <button
+                    onClick={() => dispatch(selectRecipe(recipe))}
+                    className="bg-tp shadow-lg py-1 rounded-full px-3 m-2"
+                  >
+                    View Details
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="lg:hidden pb-[100px]">
+        {recipes.map((recipe, i) => (
+          <div
+            key={i}
+            className={`${
+              i % 2 === 0 ? "bg-[#95837D]" : "bg-[#7a6f6c]"
+            }  py-3 flex flex-col p-4 rounded-md mb-3 sm:mx-3 max-w-[600px] md:mx-auto`}
+          >
+            <p className="md:text-lg">{recipe._id}</p>
+            <p className="md:text-lg">Recipe : {recipe?.title}</p>
+            <p className="md:text-lg">Cuisine : {recipe?.cuisine?.name}</p>
+            <p className="md:text-lg">Dish : {recipe?.dishesType}</p>
+            <div className="">
+              <span className="md:text-lg">Recipe image </span> :{" "}
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjKPuLozRC2n4MnlyKlPdTQm6keMAOJnlTwQ&usqp=CAU"
+                alt=""
+                className="contain h-[50px] w-[50px] contain rounded-md"
+              />
+            </div>
+            <p className="md:text-lg">
+              Click count : {recipe?.counter?.numberOfClicks}
+            </p>
+            <p className="md:text-lg">Amount : $100</p>
+            <button
+              onClick={() => dispatch(selectRecipe(recipe))}
+              className="bg-tp shadow-lg py-1 rounded-full my-2 w-fit px-5"
+            >
+              View Details
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {/* filter */}
+      <FilterSection />
+
+      <Modal open={recipe !== null}>
+        <Box>
+          <RecipeModal  />
+        </Box>
+      </Modal>
+    </div>
+  );
+}
+
+export default UserRecipes;
