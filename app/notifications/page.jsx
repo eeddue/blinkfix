@@ -6,7 +6,6 @@ import UsersNav from "@/components/UsersNav";
 import AddNotification from "@/components/modals/AddNotification";
 import axiosFetch from "@/lib/axios";
 import { selectModal, toggleNotification } from "@/redux/features/modals";
-import { users } from "@/utils";
 import { Box, Modal } from "@mui/material";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
@@ -15,7 +14,6 @@ import { useDispatch, useSelector } from "react-redux";
 function Notifications() {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [title, setTitle] = useState("");
 
   const { notification } = useSelector(selectModal);
   const dispatch = useDispatch();

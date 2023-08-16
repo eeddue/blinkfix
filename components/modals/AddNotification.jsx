@@ -16,7 +16,7 @@ function AddNotification({ setNotifications }) {
   const [to, setTo] = useState([]);
   const [countries, setCountries] = useState([]);
 
-  const socket = useRef(io("http://localhost:5000"));
+  const socket = io("https://api2.blinkfix.me");
 
   //fetch countries
   useEffect(() => {
