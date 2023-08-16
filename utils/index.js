@@ -6,7 +6,7 @@ export const navItems = [
   { path: "/transactions", name: "Transactions" },
   { path: "/orders", name: "Orders" },
   { path: "/recipes", name: "Recipes" },
-  { path: "/providers/employees", name: "Provider Employees" },
+  { path: "/employees/providers", name: "Provider Employees" },
   { path: "/employees", name: "Employees" },
   { path: "/translations", name: "Translations" },
   { path: "/notifications", name: "Notifications" },
