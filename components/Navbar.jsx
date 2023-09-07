@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useCallback, useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
-import { GrClose } from "react-icons/gr";
 import { IoMdClose } from "react-icons/io";
 
 function Navbar() {

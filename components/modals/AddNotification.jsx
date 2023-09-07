@@ -1,10 +1,9 @@
 "use client";
 import axiosFetch from "@/lib/axios";
 import { toggleNotification } from "@/redux/features/modals";
-import React, { useEffect, useRef, useState } from "react";
-import { BsChevronDown } from "react-icons/bs";
+import React, { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Multiselect from "multiselect-react-dropdown";
 import { io } from "socket.io-client";
 
